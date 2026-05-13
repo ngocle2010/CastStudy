@@ -17,6 +17,14 @@ if(isset($_SESSION['user'])){
     );
     $notifyData = mysqli_fetch_assoc($notifyQuery);
     $notifyCount = $notifyData['total'];
+    $notifyList = mysqli_query( $conn,
+        "SELECT *
+         FROM feedbacks
+         WHERE UserID='$userID'
+         AND AdminReply IS NOT NULL
+         ORDER BY ID DESC
+         LIMIT 5"
+    );
 }
 
 // Đếm số tin đã lưu để hiển thị ở header
@@ -66,15 +74,48 @@ $path = ($current_dir == 'admin') ? '../' : '';
                             <span id="wishlistCount" class="badge bg-danger rounded-pill ms-1"><?php echo $favorites_count; ?></span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="<?php echo $path; ?>feedback.php">Liên hệ
-                        <i class="fa-solid fa-bell fs-5"></i> 
-                        <?php if($notifyCount > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= $notifyCount ?>
-                        </span>
-                        <?php endif; ?>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>feedback.php">Liên hệ</a></li>
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown"> 
+                            <i class="fa-solid fa-bell fs-5"></i>
+                            <?php if($notifyCount > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $notifyCount ?>
+                            </span>
+                            <?php endif; ?>
                         </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2" style="width:350px; max-height:400px; overflow:auto;">
+                            <li class="dropdown-header fw-bold text-primary">  Thông báo hệ thống</li>
+
+                            <?php if(mysqli_num_rows($notifyList) > 0): ?>
+
+                            <?php while($noti = mysqli_fetch_assoc($notifyList)): ?>
+                            <li>
+                                <a class="dropdown-item rounded-3 p-3 mb-2"  href="feedback.php">
+                                    <div class="fw-bold text-dark">
+                                        <?= $noti['Title'] ?>
+                                    </div>
+                                    <small class="text-muted">
+                                    <?= mb_substr($noti['AdminReply'], 0, 50) ?>...
+                                    </small>
+
+                                     <?php if($noti['IsRead'] == 0): ?>
+                                    <span class="badge bg-danger ms-2"> Mới </span>
+                                     <?php endif; ?>
+                                </a>
+                            </li>
+                            <?php endwhile; ?>
+
+                            <?php else: ?>
+                            <li>
+                                <div class="dropdown-item text-muted">
+                                Không có thông báo
+                                </div>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
                     </li>
                 <?php endif; ?>
                 

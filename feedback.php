@@ -40,38 +40,7 @@ $user = $_SESSION['user'];
                 </button>
             </form>
         </div>
-    </div>
-
-    <?php
-    $userID = $user['ID'];
-    $result = mysqli_query( $conn,
-        "SELECT * FROM feedbacks
-         WHERE UserID='$userID'
-         ORDER BY ID DESC"
-    );
-    while($row = mysqli_fetch_assoc($result)):
-    ?>
-
-    <div class="card mt-4 shadow-sm border-0">
-        <div class="card-body">
-            <h5 class="text-primary"> <?= $row['Title'] ?> </h5>
-            <p> <?= $row['Content'] ?></p>
-            <div class="alert alert-info"> <?= $row['AutoReply'] ?></div>
-
-            <?php if(!empty($row['AdminReply'])): ?>
-                <div class="alert alert-success">
-                    <b>Admin phản hồi:</b>
-                    <br>
-                    <?= $row['AdminReply'] ?>
-                </div>
-            <?php else: ?>
-                <div class="alert alert-warning">
-                    Đang chờ admin phản hồi...
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php endwhile; ?>
+    </div> 
 </div>
 <?php
 mysqli_query( $conn,
