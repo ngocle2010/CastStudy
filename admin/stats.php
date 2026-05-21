@@ -30,6 +30,13 @@ include '../includes/header.php';
 ?>
 
 <div class="container my-5">
+
+    <div class="d-flex gap-2">
+            <a href="dashboard.php" class="btn btn-outline-secondary shadow-sm">
+                <i class="fa-solid fa-house me-1"></i> Về trang chủ
+            </a>
+    </div>
+
     <div class="mb-4">
         <h2 class="fw-bold">Thống kê hệ thống</h2>
         <p class="text-muted">Báo cáo số tin đăng theo tháng và bài đăng được xem nhiều nhất.</p>

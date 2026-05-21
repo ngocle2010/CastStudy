@@ -41,6 +41,13 @@ include '../includes/header.php';
 ?>
 
 <div class="container my-5">
+
+    <div class="d-flex gap-2">
+            <a href="dashboard.php" class="btn btn-outline-secondary shadow-sm">
+                <i class="fa-solid fa-house me-1"></i> Về trang chủ
+            </a>
+    </div>
+
     <div class="mb-4">
         <h2 class="fw-bold">Quản lý thành viên</h2>
         <p class="text-muted">Cấp quyền admin hoặc thành viên, và xóa tài khoản nếu cần.</p>

@@ -21,6 +21,13 @@ $result = mysqli_query($conn, $sql);
 ?>
 
 <div class="container my-5">
+
+    <div class="d-flex gap-2">
+            <a href="dashboard.php" class="btn btn-outline-secondary shadow-sm">
+                <i class="fa-solid fa-house me-1"></i> Về trang chủ
+            </a>
+    </div>
+
     <div class="mb-5">
         <h2 class="fw-bold text-dark">
             <i class="fa-solid fa-headset text-primary me-3"></i>

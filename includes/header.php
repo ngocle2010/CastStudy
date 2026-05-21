@@ -3,20 +3,32 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Mẹo fix link: Kiểm tra nếu đang ở trong folder admin thì lùi ra 1 cấp
+$current_dir = basename(dirname($_SERVER['PHP_SELF']));
+$path = ($current_dir == 'admin') ? '../' : '';
+
+// Tự động kết nối DB chuẩn xác theo vị trí thư mục hiện tại
+if (file_exists($path . 'db_config.php')) {
+    include_once $path . 'db_config.php';
+}
+
 // Thông báo khi admin phản hồi
 $notifyCount = 0;
-if(isset($_SESSION['user'])){
-    include_once 'db_config.php';
+if (isset($_SESSION['user']) && isset($conn)) {
     $userID = $_SESSION['user']['ID'];
-    $notifyQuery = mysqli_query( $conn,
+    $notifyQuery = mysqli_query($conn,
         "SELECT COUNT(*) as total
          FROM feedbacks
          WHERE UserID='$userID'
          AND AdminReply IS NOT NULL
          AND IsRead = 0"
     );
-    $notifyData = mysqli_fetch_assoc($notifyQuery);
-    $notifyCount = $notifyData['total'];
+    
+    // Kiểm tra an toàn: Chỉ fetch khi truy vấn thành công (không bị trả về false)
+    if ($notifyQuery) {
+        $notifyData = mysqli_fetch_assoc($notifyQuery);
+        $notifyCount = isset($notifyData['total']) ? intval($notifyData['total']) : 0;
+    }
 }
 
 // Đếm số tin đã lưu để hiển thị ở header
@@ -29,10 +41,6 @@ if (isset($conn) && (isset($_SESSION['user_id']) || isset($_SESSION['user']['ID'
         $favorites_count = intval($favRow['cnt']);
     }
 }
-
-// Mẹo fix link: Kiểm tra nếu đang ở trong folder admin thì lùi ra 1 cấp
-$current_dir = basename(dirname($_SERVER['PHP_SELF']));
-$path = ($current_dir == 'admin') ? '../' : '';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -106,9 +114,7 @@ $path = ($current_dir == 'admin') ? '../' : '';
         <li><a class="dropdown-item text-danger py-2 rounded-3" href="<?php echo $path; ?>logout.php"><i class="fa-solid fa-power-off me-2"></i> Đăng xuất</a></li>
     </ul>
                 </li>
-</li>
-
-                <?php endif; ?>
+<?php endif; ?>
             </ul>
         </div>
     </div>
@@ -116,12 +122,10 @@ $path = ($current_dir == 'admin') ? '../' : '';
 
 
 <?php if (isset($_SESSION['user'])): ?>
-    <!-- Nút icon chat nổi -->
     <div id="chatFloatBtn" onclick="toggleChatBox()">
         <i class="fa-solid fa-comments"></i>
     </div>
 
-    <!-- Khung chat -->
     <div id="chatBox">
         <div class="chat-box-header">
             <span><i class="fa-solid fa-comments me-2"></i>Chat với chủ trọ</span>
