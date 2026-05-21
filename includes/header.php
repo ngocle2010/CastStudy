@@ -91,7 +91,11 @@ $path = ($current_dir == 'admin') ? '../' : '';
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-3 rounded-4 p-2">
                         <li><a class="dropdown-item py-2 rounded-3" href="<?php echo $path; ?>profile.php"><i class="fa-solid fa-user-circle me-2 text-muted"></i> Hồ sơ cá nhân</a></li>
+                        <?php $currentRole = (int)($_SESSION['user']['role'] ?? $_SESSION['user']['Role'] ?? 0); ?>
+                        <?php if ($currentRole === 1 || $currentRole === 2): ?>
                         <li><a class="dropdown-item py-2 rounded-3" href="<?php echo $path; ?>my-rooms.php"><i class="fa-solid fa-list-check me-2 text-muted"></i> Quản lý tin đăng</a></li>
+                        <li><a class="dropdown-item py-2 rounded-3" href="<?php echo $path; ?>post_room.php"><i class="fa-solid fa-circle-plus me-2 text-muted"></i> Đăng tin mới</a></li>
+                        <?php endif; ?>
                         
                 <?php if(isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 2): ?> 
                     <li><hr class="dropdown-divider"></li>

@@ -171,7 +171,14 @@ if (!$result) {
                         <i class="<?php echo $is_fav ? 'fa-solid' : 'fa-regular'; ?> fa-heart text-danger"></i>
                     </button>
                     
-                    <img src="<?php echo $img_src; ?>" class="card-img-top object-fit-cover" style="height: 200px;" alt="Ảnh phòng">
+                    <div class="position-relative">
+                        <img src="<?php echo $img_src; ?>" class="card-img-top object-fit-cover" style="height: 200px;" alt="Ảnh phòng">
+                        <?php if ((int)($room['is_rented'] ?? 0) === 1): ?>
+                            <span class="position-absolute bottom-0 start-0 m-3 bg-secondary text-white px-2 py-1 rounded small shadow-sm">Đã thuê</span>
+                        <?php else: ?>
+                            <span class="position-absolute bottom-0 start-0 m-3 bg-success text-white px-2 py-1 rounded small shadow-sm">Còn trống</span>
+                        <?php endif; ?>
+                    </div>
                     
                     <div class="card-body">
                         <h6 class="text-primary fw-bold"><?php echo number_format($room['price'], 0, ',', '.'); ?> đ</h6>

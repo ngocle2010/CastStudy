@@ -10,9 +10,11 @@
 }
 
 body { 
-    font-family: 'Inter', sans-serif; 
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif; 
     background-color: #f0f2f5; 
     color: #333;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 
@@ -73,7 +75,7 @@ body {
 .price-tag {
     color: var(--danger);
     font-size: 1.4rem;
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
 }
 
 

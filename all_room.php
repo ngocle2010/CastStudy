@@ -126,6 +126,12 @@ if (!$result) {
                                 <?php echo htmlspecialchars($room['category_name']); ?>
                             </span>
 
+                            <?php if ((int)($room['is_rented'] ?? 0) === 1): ?>
+                                <span class="position-absolute bottom-0 start-0 m-3 bg-secondary text-white px-2 py-1 rounded small shadow-sm">Đã thuê</span>
+                            <?php else: ?>
+                                <span class="position-absolute bottom-0 start-0 m-3 bg-success text-white px-2 py-1 rounded small shadow-sm">Còn trống</span>
+                            <?php endif; ?>
+
                             <?php if (!empty($room['distance_km'])): ?>
 
                             <span class="position-absolute top-0 end-0 m-3 bg-success text-white px-2 py-1 rounded small shadow-sm">

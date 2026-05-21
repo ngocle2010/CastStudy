@@ -5,12 +5,18 @@ error_reporting(E_ALL);
 if (session_status() === PHP_SESSION_NONE) session_start();
 require_once 'includes/db_config.php';
 
-if (!isset($_SESSION['user'])) {
+$role = (int)($_SESSION['user']['role'] ?? $_SESSION['user']['Role'] ?? 0);
+
+if (!isset($_SESSION['user']) || ($role !== 1 && $role !== 2)) {
     header("Location: index.php");
     exit();
 }
 
-$user_id = $_SESSION['user']['id'];
+$user_id = (int)($_SESSION['user_id'] ?? $_SESSION['user']['ID'] ?? $_SESSION['user']['id'] ?? 0);
+
+if ($user_id <= 0) {
+    die("Lỗi: Không xác định được tài khoản đăng nhập.");
+}
 
 // lấy dữ liệu form
 $title = trim($_POST['title'] ?? '');

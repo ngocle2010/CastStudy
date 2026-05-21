@@ -222,6 +222,12 @@ $roomLng = !empty($room['longitude']) ? (float)$room['longitude'] : $vinhLng;
                         <?php echo number_format($room['price'], 0, ',', '.'); ?>đ 
                         <small class="text-muted fs-6">/ tháng</small>
                     </h3>
+
+                    <?php if ((int)($room['is_rented'] ?? 0) === 1): ?>
+                        <div class="alert alert-secondary py-2 mb-4 fw-bold">Đã thuê</div>
+                    <?php else: ?>
+                        <div class="alert alert-success py-2 mb-4 fw-bold">Còn trống</div>
+                    <?php endif; ?>
                     
                     <div class="d-grid gap-2">
                         <a href="tel:<?php echo htmlspecialchars($room['phone']); ?>" class="btn btn-primary py-3 fw-bold rounded-pill shadow">
