@@ -1,6 +1,11 @@
 <?php 
 require_once 'includes/db_config.php'; 
 require_once 'includes/header.php'; 
+
+$currentRole = (int)($_SESSION['user']['role'] ?? $_SESSION['user']['Role'] ?? 0);
+$currentUserId = (int)($_SESSION['user_id'] ?? $_SESSION['user']['ID'] ?? 0);
+$ownerRoomFilter = ($currentRole === 1 && $currentUserId > 0) ? " AND motel.user_id = $currentUserId" : "";
+$ownerHotRoomFilter = ($currentRole === 1 && $currentUserId > 0) ? " AND user_id = $currentUserId" : "";
 ?>
 
 <section class="hero-section">
@@ -100,7 +105,7 @@ require_once 'includes/header.php';
                 $sql_new = "SELECT motel.*, categories.Name as category_name 
                             FROM motel 
                             JOIN categories ON motel.category_id = categories.ID 
-                            WHERE motel.approve = 1 
+                            WHERE motel.approve = 1 $ownerRoomFilter
                             ORDER BY created_at DESC LIMIT 6";
                 $res_new = mysqli_query($conn, $sql_new);
 
@@ -205,7 +210,7 @@ require_once 'includes/header.php';
 
                 <div class="list-group list-group-flush">
                     <?php
-                    $sql_hot = "SELECT * FROM motel WHERE approve = 1 ORDER BY count_view DESC LIMIT 5";
+                    $sql_hot = "SELECT * FROM motel WHERE approve = 1 $ownerHotRoomFilter ORDER BY count_view DESC LIMIT 5";
                     $res_hot = mysqli_query($conn, $sql_hot);
 
                     while($hot = mysqli_fetch_assoc($res_hot)) {

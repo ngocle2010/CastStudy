@@ -3,6 +3,9 @@ require_once 'includes/db_config.php';
 require_once 'includes/header.php'; 
 
 $near_vinh = $_GET['near_vinh'] ?? '';
+$currentRole = (int)($_SESSION['user']['role'] ?? $_SESSION['user']['Role'] ?? 0);
+$currentUserId = (int)($_SESSION['user_id'] ?? $_SESSION['user']['ID'] ?? 0);
+$ownerRoomFilter = ($currentRole === 1 && $currentUserId > 0) ? " AND motel.user_id = $currentUserId" : "";
 
 // TỌA ĐỘ ĐẠI HỌC VINH MỚI
 $vinhLat = 18.667238;
@@ -25,7 +28,7 @@ $distanceSql = "
 $sql = "SELECT motel.*, categories.Name AS category_name, $distanceSql AS distance_km
         FROM motel
         JOIN categories ON motel.category_id = categories.ID
-        WHERE motel.approve = 1";
+        WHERE motel.approve = 1 $ownerRoomFilter";
 
 if ($near_vinh == '1') {
 

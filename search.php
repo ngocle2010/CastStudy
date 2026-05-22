@@ -10,6 +10,9 @@ $category_id = isset($_GET['category']) && $_GET['category'] !== '' ? intval($_G
 $price_range = $_GET['price'] ?? '';
 $near_vinh = $_GET['near_vinh'] ?? '';
 $utility = $_GET['utility'] ?? '';
+$currentRole = (int)($_SESSION['user']['role'] ?? $_SESSION['user']['Role'] ?? 0);
+$currentUserId = (int)($_SESSION['user_id'] ?? $_SESSION['user']['ID'] ?? 0);
+$ownerRoomFilter = ($currentRole === 1 && $currentUserId > 0) ? " AND motel.user_id = $currentUserId" : "";
 // Xử lý khoảng giá từ index.php
 $min_price = 0;
 $max_price = 999999999;
@@ -52,7 +55,7 @@ $distanceSql = "(6371 * acos(cos(radians($vinhLat)) * cos(radians(motel.latitude
 $sql = "SELECT motel.*, categories.Name as category_name, $distanceSql AS distance_km
         FROM motel 
         JOIN categories ON motel.category_id = categories.ID 
-        WHERE motel.approve = 1";
+        WHERE motel.approve = 1 $ownerRoomFilter";
 
 $sql .= " AND motel.price BETWEEN $min_price AND $max_price";
 
