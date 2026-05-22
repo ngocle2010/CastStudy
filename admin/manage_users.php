@@ -67,6 +67,7 @@ include '../includes/header.php';
                         <th>Email</th>
                         <th>Họ tên</th>
                         <th>Quyền</th>
+                        <th>Reset mật khẩu</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -83,6 +84,34 @@ include '../includes/header.php';
                                 <?php else: ?>
                                     <span class="badge bg-secondary">Thành viên</span>
                                 <?php endif; ?>
+                            </td>
+                            <td>
+
+                                <?php if($user['ResetRequest'] == 1 && $user['ResetApproved'] == 0): ?>
+
+                                    <a href="approve_reset.php?id=<?= $user['ID'] ?>"
+                                    class="btn btn-warning btn-sm">
+                                        Xác nhận reset
+                                    </a>
+
+                                <?php elseif($user['ResetApproved'] == 1): ?>
+
+                                    <span class="badge bg-success">
+
+                                        Đã duyệt
+
+                                    </span>
+
+                                <?php else: ?>
+
+                                    <span class="text-muted">
+
+                                        Không có yêu cầu
+
+                                    </span>
+
+                                <?php endif; ?>
+
                             </td>
                             <td>
                                 <div class="d-flex gap-2 flex-wrap">
