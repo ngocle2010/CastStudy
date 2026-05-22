@@ -23,25 +23,22 @@ if (isset($_SESSION['user']) && isset($_SESSION['user']['ID']) && isset($conn)) 
          AND AdminReply IS NOT NULL
          AND IsRead = 0"
     );
-<<<<<<< HEAD
+$notifyQuery = mysqli_query($conn, "SELECT COUNT(*) as total FROM feedbacks WHERE UserID = '$userID' AND AdminReply IS NOT NULL AND IsRead = 0");
+if ($notifyQuery) {
+    $notifyData = mysqli_fetch_assoc($notifyQuery);
+    $notifyCount = isset($notifyData['total']) ? intval($notifyData['total']) : 0;
+} else {
+    $notifyCount = 0;
+}
+
+// 2. Lấy danh sách 5 thông báo mới nhất để hiển thị
+$notifyList = mysqli_query($conn, "SELECT * FROM feedbacks WHERE UserID = '$userID' AND AdminReply IS NOT NULL ORDER BY ID DESC LIMIT 5");
 
     // Kiểm tra an toàn: Chỉ fetch khi truy vấn thành công (không bị trả về false)
     if ($notifyQuery) {
         $notifyData = mysqli_fetch_assoc($notifyQuery);
         $notifyCount = isset($notifyData['total']) ? intval($notifyData['total']) : 0;
     }
-=======
-    $notifyData = mysqli_fetch_assoc($notifyQuery);
-    $notifyCount = $notifyData['total'];
-    $notifyList = mysqli_query( $conn,
-        "SELECT *
-         FROM feedbacks
-         WHERE UserID='$userID'
-         AND AdminReply IS NOT NULL
-         ORDER BY ID DESC
-         LIMIT 5"
-    );
->>>>>>> 0066ea24acd33da4deac12022c7b975a9a510208
 }
 
 // Đếm số tin đã lưu để hiển thị ở header
@@ -131,16 +128,6 @@ if (isset($conn) && isset($_SESSION['user']) && isset($_SESSION['user']['ID']) &
                             <span id="wishlistCount" class="badge bg-danger rounded-pill ms-1"><?php echo $favorites_count; ?></span>
                         </a>
                     </li>
-<<<<<<< HEAD
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="<?php echo $path; ?>feedback.php">Liên hệ
-                        <i class="fa-solid fa-bell fs-5"></i>
-                        <?php if($notifyCount > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= $notifyCount ?>
-                        </span>
-                        <?php endif; ?>
-=======
                     <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>feedback.php">Liên hệ</a></li>
                     <li class="nav-item dropdown">
 
@@ -151,7 +138,6 @@ if (isset($conn) && isset($_SESSION['user']) && isset($_SESSION['user']['ID']) &
                                 <?= $notifyCount ?>
                             </span>
                             <?php endif; ?>
->>>>>>> 0066ea24acd33da4deac12022c7b975a9a510208
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2" style="width:350px; max-height:400px; overflow:auto;">
