@@ -23,12 +23,25 @@ if (isset($_SESSION['user']) && isset($_SESSION['user']['ID']) && isset($conn)) 
          AND AdminReply IS NOT NULL
          AND IsRead = 0"
     );
+<<<<<<< HEAD
 
     // Kiểm tra an toàn: Chỉ fetch khi truy vấn thành công (không bị trả về false)
     if ($notifyQuery) {
         $notifyData = mysqli_fetch_assoc($notifyQuery);
         $notifyCount = isset($notifyData['total']) ? intval($notifyData['total']) : 0;
     }
+=======
+    $notifyData = mysqli_fetch_assoc($notifyQuery);
+    $notifyCount = $notifyData['total'];
+    $notifyList = mysqli_query( $conn,
+        "SELECT *
+         FROM feedbacks
+         WHERE UserID='$userID'
+         AND AdminReply IS NOT NULL
+         ORDER BY ID DESC
+         LIMIT 5"
+    );
+>>>>>>> 0066ea24acd33da4deac12022c7b975a9a510208
 }
 
 // Đếm số tin đã lưu để hiển thị ở header
@@ -118,6 +131,7 @@ if (isset($conn) && isset($_SESSION['user']) && isset($_SESSION['user']['ID']) &
                             <span id="wishlistCount" class="badge bg-danger rounded-pill ms-1"><?php echo $favorites_count; ?></span>
                         </a>
                     </li>
+<<<<<<< HEAD
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="<?php echo $path; ?>feedback.php">Liên hệ
                         <i class="fa-solid fa-bell fs-5"></i>
@@ -126,7 +140,50 @@ if (isset($conn) && isset($_SESSION['user']) && isset($_SESSION['user']['ID']) &
                             <?= $notifyCount ?>
                         </span>
                         <?php endif; ?>
+=======
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="<?php echo $path; ?>feedback.php">Liên hệ</a></li>
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown"> 
+                            <i class="fa-solid fa-bell fs-5"></i>
+                            <?php if($notifyCount > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $notifyCount ?>
+                            </span>
+                            <?php endif; ?>
+>>>>>>> 0066ea24acd33da4deac12022c7b975a9a510208
                         </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2" style="width:350px; max-height:400px; overflow:auto;">
+                            <li class="dropdown-header fw-bold text-primary">  Thông báo hệ thống</li>
+
+                            <?php if(mysqli_num_rows($notifyList) > 0): ?>
+
+                            <?php while($noti = mysqli_fetch_assoc($notifyList)): ?>
+                            <li>
+                                <a class="dropdown-item rounded-3 p-3 mb-2"  href="feedback.php">
+                                    <div class="fw-bold text-dark">
+                                        <?= $noti['Title'] ?>
+                                    </div>
+                                    <small class="text-muted">
+                                    <?= mb_substr($noti['AdminReply'], 0, 50) ?>...
+                                    </small>
+
+                                     <?php if($noti['IsRead'] == 0): ?>
+                                    <span class="badge bg-danger ms-2"> Mới </span>
+                                     <?php endif; ?>
+                                </a>
+                            </li>
+                            <?php endwhile; ?>
+
+                            <?php else: ?>
+                            <li>
+                                <div class="dropdown-item text-muted">
+                                Không có thông báo
+                                </div>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
                     </li>
                     <?php if ($headerCurrentRole !== 2): ?>
                     <li class="nav-item">
